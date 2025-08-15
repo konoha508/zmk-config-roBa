@@ -66,7 +66,7 @@
 &kp Q             &kp L         &kp U         &kp COMMA             &kp PERIOD                                                &kp F        &kp W  &kp R  &kp Y  &kp P
 &mt CARET E       &kp I         &kp A         &kp O                 &kp SLASH      &kp ESC                     &kp MINUS      &kp K        &kp T  &kp N  &kp S  &kp H
 &mt LEFT_SHIFT Z  &kp X         &kp C         &kp V                 &kp SEMICOLON  &to 0                       &kp EQUAL      &kp G        &kp D  &kp M  &kp Z  &kp B
-&kp LCTRL         &kp LEFT_WIN  &kp LEFT_ALT  &lt_to_layer_0 3 F10  &lt 2 SPACE    &lt_to_layer_0 5 SPACE      &kp BACKSPACE  &lt 1 ENTER                       &kp J
+&kp LCTRL         &kp LEFT_WIN  &kp LEFT_ALT  &lt_to_layer_0 3 F10  &lt 2 SPACE    &lt_to_layer_0 4 SPACE      &kp BACKSPACE  &lt 1 ENTER                       &kp J
             >;
 
             sensor-bindings = <&inc_dec_kp PG_UP PAGE_DOWN>;
@@ -103,10 +103,10 @@
 
         MOUSE {
             bindings = <
-&trans  &trans  &trans  &trans  &trans                      &trans  &trans    &trans    &trans    &trans
-&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &mkp MB1  &mkp MB3  &mkp MB2  &trans
-&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &mkp MB4  &mkp MB5  &trans    &trans
-&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans                                &trans
+&bt BT_SEL 0  &bt BT_SEL 1    &bt BT_SEL 2  &bt BT_SEL 3               &bt BT_SEL 4                      &trans  &trans    &trans    &trans    &trans
+&bt BT_CLR    &bt BT_CLR_ALL  &trans        &trans                     &trans        &trans      &trans  &trans  &mkp MB1  &mkp MB3  &mkp MB2  &trans
+&trans        &trans          &trans        &trans                     &lt 4 B       &trans      &trans  &trans  &mkp MB4  &mkp MB5  &trans    &trans
+&trans        &trans          &trans        &lt_to_layer_0 4 NUMBER_4  &trans        &trans      &trans  &trans                                &trans
             >;
         };
 
