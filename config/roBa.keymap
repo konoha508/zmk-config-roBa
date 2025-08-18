@@ -90,6 +90,8 @@
 &kp UNDERSCORE        &trans           &kp UNDERSCORE        &kp SINGLE_QUOTE       &kp DOUBLE_QUOTES  &trans      &kp AT_SIGN  &kp LEFT_BRACE        &kp RIGHT_BRACE        &kp RIGHT_BRACE   &trans             &kp SEMICOLON
 &trans                &trans           &trans                &trans                 &trans             &trans      &trans       &trans                                                                            &trans
             >;
+
+            sensor-bindings = <&inc_dec_kp C_BRI_UP C_BRI_DN>;
         };
 
         ARROW {
