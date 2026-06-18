@@ -9,71 +9,125 @@
 };
 
 / {
+    macros {
+        to_layer_0: to_layer_0 {
+            compatible = "zmk,behavior-macro-one-param";
+            #binding-cells = <1>;
+            bindings = <&to 0 &macro_param_1to1 &kp MACRO_PLACEHOLDER>;
+            label = "TO_LAYER_0";
+        };
+
+        mul_mark: mul_mark {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_press &kp LALT &macro_tap &kp KP_N0 &kp KP_N2 &kp KP_N1 &kp KP_N5 &macro_release &kp LALT>;
+            label = "MUL_MARK";
+        };
+
+        div_mark: div_mark {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_press &kp LALT &macro_tap &kp KP_N0 &kp KP_N2 &kp KP_N4 &kp KP_N7 &macro_release &kp LALT>;
+            label = "DIV_MARK";
+        };
+    };
+
+    behaviors {
+        mt_exit_AML: mt_exit_AML {
+            compatible = "zmk,behavior-hold-tap";
+            label = "MT_EXIT_AML";
+            bindings = <&kp>, <&kp>;
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <200>;
+        };
+
+        lt_to_layer_0: lt_to_layer_0 {
+            compatible = "zmk,behavior-hold-tap";
+            label = "LAYER_TAP_TO_0";
+            bindings = <&mo>, <&to_layer_0>;
+            #binding-cells = <2>;
+            tapping-term-ms = <200>;
+        };
+    };
+
     keymap {
         compatible = "zmk,keymap";
 
-        /*
-         * Arai video based roBa layout draft.
-         * Confirmed from the video: Layer 0 is QWERTY, Z is Tap=Z/Hold=Shift,
-         * Layer 2 is used for numbers/symbols and function keys.
-         * Not confirmed clearly enough to copy verbatim: exact Layer 1 contents,
-         * exact LANG1/LANG2 physical positions, and every symbol key on Layer 2.
-         * For build safety, Japanese IME keys use ZMK's HENKAN/MUHENKAN names.
-         */
+        /* Screenshot source: Layer0. Physical order follows roBa default_transform: 10 / 12 / 12 / 9. */
         default_layer {
             bindings = <
-&kp Q                 &kp W         &kp E      &kp R     &kp T                                      &kp Y      &kp U  &kp I      &kp O    &kp P
-&kp A                 &kp S         &kp D      &kp F     &kp G       &kp TAB        &kp SPACE       &kp H      &kp J  &kp K      &kp L    &kp SEMICOLON
-&mt LEFT_SHIFT Z      &kp X         &kp C      &kp V     &kp B       &kp BSPC       &kp ENTER       &kp N      &kp M  &kp COMMA  &kp DOT  &kp SLASH
-&kp LEFT_CONTROL      &kp LEFT_GUI  &kp LEFT_ALT  &mo 1   &kp HENKAN  &kp MUHENKAN   &mo 2           &mo 3                               &kp RIGHT_SHIFT
+&kp Q                    &kp W     &kp E      &kp R       &kp T                                      &kp Y        &kp U    &kp I      &kp O      &lt 6 P
+&mt_exit_AML LCTRL A     &kp S     &kp D      &kp F       &kp G       &trans       &kp SEMICOLON   &kp H        &kp J    &kp K      &kp L      &lt 7 MINUS
+&mt_exit_AML LSHIFT Z    &kp X     &kp C      &kp V       &kp B       &lt 5 TAB    &kp DOUBLE_QUOTES &kp N      &kp M    &kp COMMA  &kp DOT    &mt_exit_AML LSHIFT SLASH
+&kp CARET                &kp LGUI  &kp LALT   &lt 4 LANG2 &lt 2 UNDER &lt_to_layer_0 3 LANG1 &kp BSPC  &lt 1 ENTER                              &lt 5 ESC
             >;
 
             sensor-bindings = <&inc_dec_kp PG_UP PAGE_DOWN>;
         };
 
-        FUNCTION {
+        /* Screenshot source: Layer1. */
+        layer_1 {
             bindings = <
-&kp ESCAPE      &kp LC(LS(TAB))         &kp UP_ARROW    &kp LC(TAB)              &kp INSERT                             &kp PRINTSCREEN  &kp F7  &kp F8  &kp F9   &kp F10
-&kp HOME        &kp LEFT_ARROW          &kp DOWN_ARROW  &kp RIGHT_ARROW          &kp END     &trans      &trans          &kp F1           &kp F2  &kp F3  &kp F4   &kp F11
-&kp LEFT_SHIFT  &kp LG(LS(LEFT_ARROW))  &kp PAGE_DOWN   &kp LG(LS(RIGHT_ARROW))  &kp PAGE_UP &trans      &trans          &kp F5           &kp F6  &trans  &trans   &kp F12
-&trans          &trans                  &trans          &trans                   &trans      &trans      &trans          &trans                                  &trans
+&trans               &kp AMPERSAND  &kp ASTERISK  &kp LEFT_PARENTHESIS  &kp RIGHT_PARENTHESIS                      &trans  &kp LEFT_BRACKET  &kp RIGHT_BRACKET  &trans         &trans
+&kp GRAVE            &kp DOLLAR     &kp PERCENT   &kp CARET             &trans              &trans      &trans  &trans            &kp LEFT_PARENTHESIS  &kp RIGHT_PARENTHESIS &kp BACKSLASH &trans
+&mt LSHIFT MINUS     &kp EXCLAMATION &kp AT_SIGN   &kp HASH              &trans              &trans      &trans  &trans            &kp LEFT_BRACE    &kp RIGHT_BRACE   &kp PIPE      &trans
+&trans               &trans         &trans        &trans                &trans              &trans      &trans  &trans                                                   &trans
             >;
 
-            sensor-bindings = <&inc_dec_kp C_VOLUME_UP C_VOL_DN>;
+            sensor-bindings = <&inc_dec_kp RIGHT LEFT>;
         };
 
-        NUM {
+        /* Screenshot source: Layer2. mul_mark is shown in detail; div_mark appears by name on the layer. */
+        layer_2 {
             bindings = <
-&kp GRAVE        &kp N7      &kp N8      &kp N9      &kp EQUAL                              &kp F7            &kp F8             &kp F9         &kp F10           &kp F11
-&kp EXCLAMATION  &kp N4      &kp N5      &kp N6      &kp MINUS  &trans      &trans         &kp LEFT_PARENTHESIS  &kp RIGHT_PARENTHESIS  &kp LEFT_BRACKET  &kp RIGHT_BRACKET  &kp F12
-&kp AT_SIGN      &kp N1      &kp N2      &kp N3      &kp PLUS   &trans      &trans         &kp LEFT_BRACE        &kp RIGHT_BRACE        &kp BACKSLASH     &kp SINGLE_QUOTE   &kp DELETE
-&kp HASH         &kp DOLLAR  &kp N0      &kp PERCENT &kp CARET  &kp AMPERSAND &trans       &trans                                                         &kp PIPE
+&trans     &kp N7  &kp N8  &kp N9  &kp PLUS                                   &trans     &kp F7  &kp F8  &kp F9  &kp F12
+&trans     &kp N4  &kp N5  &kp N6  &kp MINUS  &trans      &mul_mark            &trans     &kp F4  &kp F5  &kp F6  &kp F11
+&kp N0     &kp N1  &kp N2  &kp N3  &kp EQUAL  &kp KP_MULTIPLY &div_mark         &trans     &kp F1  &kp F2  &kp F3  &kp F10
+&trans     &trans  &trans  &trans  &trans     &trans      &trans               &trans                             &trans
             >;
 
-            sensor-bindings = <&inc_dec_kp C_BRI_UP C_BRI_DN>;
+            sensor-bindings = <&inc_dec_kp PG_UP PAGE_DOWN>;
         };
 
-        ARROW {
+        /* Screenshot source: Layer3. */
+        layer_3 {
             bindings = <
-&kp ESCAPE      &kp LC(LS(TAB))         &kp UP_ARROW    &kp LC(TAB)              &trans                       &trans  &trans  &mkp RCLK  &mkp LCLK  &trans
-&kp HOME        &kp LEFT_ARROW          &kp DOWN_ARROW  &kp RIGHT_ARROW          &kp END  &trans      &trans  &trans  &trans  &trans     &trans     &trans
-&kp LEFT_SHIFT  &kp LG(LS(LEFT_ARROW))  &trans          &kp LG(LS(RIGHT_ARROW))  &trans   &trans      &trans  &trans  &trans  &trans     &trans     &trans
-&trans          &trans                  &trans          &trans                   &trans   &trans      &trans  &trans                                &trans
+&kp PG_UP      &trans          &kp UP_ARROW    &trans           &kp PG_DN                         &trans  &trans  &kp LG(UP_ARROW)    &trans              &trans
+&kp HOME       &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW  &kp END   &trans      &kp PSCRN  &trans  &kp LG(LEFT_ARROW)  &kp LG(DOWN_ARROW)  &kp LG(RIGHT_ARROW) &trans
+&trans         &trans          &trans          &trans           &trans    &trans      &kp LS(PSCRN) &trans &trans              &trans              &trans              &trans
+&trans         &trans          &trans          &trans           &trans    &trans      &kp BSPC  &trans                                      &trans
             >;
 
-            sensor-bindings = <&inc_dec_kp LC(PAGE_UP) LC(PAGE_DOWN)>;
+            sensor-bindings = <&inc_dec_kp LC(TAB) LC(LS(TAB))>;
         };
 
+        /* Screenshot source: Layer4. */
+        layer_4 {
+            bindings = <
+&trans  &trans  &trans  &trans  &trans                           &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4
+&trans  &trans  &trans  &trans  &trans  &trans      &trans       &trans        &trans        &trans        &trans        &trans
+&trans  &trans  &trans  &trans  &trans  &trans      &bootloader  &trans        &trans        &trans        &trans        &bt BT_CLR
+&trans  &trans  &trans  &trans  &trans  &trans      &trans       &trans                                                  &bt BT_CLR_ALL
+            >;
+
+            sensor-bindings = <&inc_dec_kp PG_UP PAGE_DOWN>;
+        };
+
+        /* Screenshot source: Layer5 / MOUSE. */
         MOUSE {
             bindings = <
-&kp ESC  &trans  &trans  &trans  &trans                                      &bt BT_SEL 0   &bt BT_SEL 1   &bt BT_SEL 2   &bt BT_SEL 3   &bt BT_SEL 4
-&trans   &trans  &trans  &trans  &trans  &trans              &bt BT_CLR_ALL  &bt BT_DISC 0  &bt BT_DISC 1  &bt BT_DISC 2  &bt BT_DISC 3  &bt BT_DISC 4
-&trans   &trans  &trans  &trans  &trans  &bt BT_CLR_ALL      &bt BT_CLR      &trans         &trans         &trans         &trans         &trans
-&trans   &trans  &trans  &trans  &trans  &trans              &trans          &trans                                                      &trans
+&trans  &trans  &trans  &trans  &trans                      &trans  &trans  &trans    &trans    &trans
+&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &mkp MB1  &mkp MB3  &mkp MB2  &trans
+&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &mkp MB4  &trans    &mkp MB5  &trans
+&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans                        &trans
             >;
+
+            sensor-bindings = <&inc_dec_kp PG_UP PAGE_DOWN>;
         };
 
-        SCROLL {
+        /* Layer6 is referenced by Layer0 (&lt 6 P), but no Layer6 screenshot was provided. */
+        layer_6 {
             bindings = <
 &trans  &trans  &trans  &trans  &trans                      &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans  &trans
@@ -82,12 +136,13 @@
             >;
         };
 
-        layer_6 {
+        /* Layer7 is referenced by Layer0 (&lt 7 MINUS), but no Layer7 screenshot was provided. */
+        layer_7 {
             bindings = <
-&trans  &trans        &trans        &trans        &trans                           &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4
-&trans  &trans        &trans        &trans        &trans  &trans      &trans       &trans        &trans        &trans        &trans        &trans
-&trans  &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &trans  &trans      &bootloader  &trans        &trans        &trans        &trans        &bt BT_CLR
-&trans  &trans        &trans        &trans        &trans  &trans      &trans       &trans                                                  &bt BT_CLR_ALL
+&trans  &trans  &trans  &trans  &trans                      &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans      &trans  &trans                          &trans
             >;
         };
     };
